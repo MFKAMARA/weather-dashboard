@@ -61,3 +61,16 @@ searchHistorySectionElement.addEventListener("click", function (event) {
         fetchWeather(cityName);
     }
 });
+
+function fetchForecast(lat, lon, cityName) {
+    const forecastURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${weatherApiKey}`;
+
+    fetch(forecastURL)
+        .then((response) => response.json())
+        .then((data) => {
+            displayForecast(data.list);
+        })
+        .catch((error) => {
+            console.error("Error fetching forecast data:", error);
+        });
+}
