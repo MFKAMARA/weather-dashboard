@@ -12,3 +12,35 @@ searchFormElement.addEventListener("submit", function (event) {
         fetchWeather(cityName);
     }
 });
+
+function fetchWeather(cityName) {
+    const queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${weatherApiKey}`;
+
+    fetch(queryURL)
+        .then((response) => response.json())
+        .then((data) => {
+            displayCurrentWeather(data);
+            fetchForecast(data.coord.lat, data.coord.lon, cityName);
+            addToSearchHistory(cityName);
+        })
+        .catch((error) => {
+            console.error("Error fetching current weather data:", error);
+        });
+}
+
+function addToSearchHistory(cityName) {
+    let searchHistory =
+        JSON.parse(localStorage.getItem("weatherSearchHistory")) || [];
+
+    searchHistory.push(cityName);
+
+    const maxHistoryLength = 5;
+    if (searchHistory.length > maxHistoryLength) {
+        searchHistory = searchHistory.slice(
+            searchHistory.length - maxHistoryLength
+        );
+    }
+
+    localStorage.setItem("weatherSearchHistory", JSON.stringify(searchHistory));
+    displaySearchHistory();
+}
