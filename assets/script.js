@@ -88,3 +88,34 @@ function displayCurrentWeather(data) {
     `;
     currentWeatherSectionElement.innerHTML = html;
 }
+
+function displayForecast(forecastData) {
+    let html = '<h2 class="mb-3">5-Day Forecast</h2>';
+    html += '<div class="row">';
+
+    forecastData.slice(0, 5).forEach((entry) => {
+        const iconURL = `https://openweathermap.org/img/w/${entry.weather[0].icon}.png`;
+        const date = new Date(entry.dt_txt);
+        const weekDay = date.toLocaleDateString("en-US", { weekday: "long" });
+
+        html += `
+            <div class="col-md-4 my-3">
+            <hr>
+                <div class="forecast-item">
+                    <p><strong><u>Date:</u></strong> ${weekDay}</p>
+                    <img src="${iconURL}" alt="Weather Icon">
+                    <p><strong>Temperature: </strong> ${entry.main.temp} °C</p>
+                    <p><strong>Humidity: </strong> ${entry.main.humidity}%</p>
+                    <p><strong>Wind Speed: </strong> ${entry.wind.speed} m/s</p>
+                </div>
+            </div>
+        `;
+    });
+
+    html += "</div>";
+    forecastSectionElement.innerHTML = html;
+}
+
+window.addEventListener("load", function () {
+    displaySearchHistory();
+});
