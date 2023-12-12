@@ -74,3 +74,17 @@ function fetchForecast(lat, lon, cityName) {
             console.error("Error fetching forecast data:", error);
         });
 }
+
+function displayCurrentWeather(data) {
+    const iconURL = `https://openweathermap.org/img/w/${data.weather[0].icon}.png`;
+
+    const html = `
+        <h2 class="mb-3">${data.name}, ${data.sys.country}</h2>
+        <p>Today the weather is <strong> ${data.weather[0].description} </strong> </p>
+        <img src="${iconURL}" alt="Weather Icon">
+        <p><strong>Temperature: </strong> ${data.main.temp} °C</p>
+        <p><strong>Humidity: </strong> ${data.main.humidity}%</p>
+        <p><strong>Wind Speed: </strong> ${data.wind.speed} m/s</p>
+    `;
+    currentWeatherSectionElement.innerHTML = html;
+}
