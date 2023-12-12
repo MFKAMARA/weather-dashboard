@@ -93,8 +93,24 @@ function displayForecast(forecastData) {
     let html = '<h2 class="mb-3">5-Day Forecast</h2>';
     html += '<div class="row">';
 
-    forecastData.slice(0, 5).forEach((entry) => {
+    // Forecast day by day
+    const groupedByDay = forecastData.reduce((acc, entry) => {
+        const date = new Date(entry.dt_txt);
+        const dayKey = date.toISOString().split('T')[0];
+
+        if (!acc[dayKey]) {
+            acc[dayKey] = [];
+        }
+
+        acc[dayKey].push(entry);
+        return acc;
+    }, {});
+
+    // First forecast entry for each day
+    Object.values(groupedByDay).slice(0, 5).forEach((dayEntries) => {
+        const entry = dayEntries[0];
         const iconURL = `https://openweathermap.org/img/w/${entry.weather[0].icon}.png`;
+
         const date = new Date(entry.dt_txt);
         const weekDay = date.toLocaleDateString("en-US", { weekday: "long" });
 
@@ -115,6 +131,8 @@ function displayForecast(forecastData) {
     html += "</div>";
     forecastSectionElement.innerHTML = html;
 }
+
+
 
 window.addEventListener("load", function () {
     displaySearchHistory();
