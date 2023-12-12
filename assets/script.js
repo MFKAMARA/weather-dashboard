@@ -44,3 +44,20 @@ function addToSearchHistory(cityName) {
     localStorage.setItem("weatherSearchHistory", JSON.stringify(searchHistory));
     displaySearchHistory();
 }
+
+function displaySearchHistory() {
+    const searchHistory =
+        JSON.parse(localStorage.getItem("weatherSearchHistory")) || [];
+    const historyHtml = searchHistory.map((city) => `<p>${city}</p>`).join("");
+
+    if (searchHistorySectionElement) {
+        searchHistorySectionElement.innerHTML = historyHtml;
+    }
+}
+
+searchHistorySectionElement.addEventListener("click", function (event) {
+    if (event.target.tagName === "P") {
+        const cityName = event.target.textContent.trim();
+        fetchWeather(cityName);
+    }
+});
